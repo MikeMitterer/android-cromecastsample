@@ -24,8 +24,26 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile 'junit:junit:4.12'
+
+    compile group: 'com.android.support', name: 'appcompat-v7', version: androidVersion
+    compile group: 'com.android.support', name: 'mediarouter-v7', version: androidVersion
+    compile group: 'com.android.support', name: 'recyclerview-v7', version: androidVersion
+
+    compile group: 'com.google.android.gms', name: 'play-services-cast-framework', version: googlePlayVersion
+
+    // Apache ----------------------------------------------------------------------------------------------------------
+    compile 	group: 'org.apache.commons',                name: 'commons-lang3',          version: commonsLang3Version
+    compile 	group: 'commons-io',                        name: 'commons-io',             version: commonsIOVersion
+
+    // ReactiveX
+    compile group: 'io.reactivex', name: 'rxjava', version: rxJavaVersion
+    compile group: 'io.reactivex', name: 'rxandroid', version: rxJavaAndroidVersion
+
+    // Test ------------------------------------------------------------------------------------------------------------
+    testCompile group: 'junit', name: 'junit', version: junitVersion
+
+    // androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    //    exclude group: 'com.android.support', module: 'support-annotations'
+    // })
+
 }

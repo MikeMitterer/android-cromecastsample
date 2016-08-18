@@ -39,7 +39,7 @@ public class FileListAdapter extends ArrayAdapter<String> {
 
     private static final int BITMAP_WIDTH = 200;
 
-    private static final LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(5);
+    private static final LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(30);
 
     /** Damit kann "unsubscribe" automatisiert werden. */
     private final  List<Subscription> subscriptions = new ArrayList<>();

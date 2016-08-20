@@ -2,7 +2,7 @@
     <string name="app_name">ChromeCastSample</string>
     <!--
      SampleID: 4F8B3483
-     Chromecast V1: -------
+     Chromecast V1: xxxxxxxx
     -->
     <string name="app_id">4F8B3483</string>
     <string name="media_route_menu_title">Browse</string>

@@ -3,6 +3,8 @@ package at.mikemitterer.mobile.chromecastsample.ui.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.LruCache;
@@ -13,7 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import at.mikemitterer.mobile.chromecastsample.R;
+import at.mikemitterer.mobile.chromecastsample.eventbus.RxEventBus;
+import at.mikemitterer.mobile.chromecastsample.eventbus.RxEventBusProvider;
+import at.mikemitterer.mobile.chromecastsample.eventbus.events.AbstractDataEvent;
+import at.mikemitterer.mobile.chromecastsample.eventbus.events.MessageEvent;
 import at.mikemitterer.mobile.chromecastsample.utils.AppDirs;
+import org.apache.commons.io.FilenameUtils;
 import rx.Single;
 import rx.Subscriber;
 import rx.Subscription;
@@ -43,6 +50,8 @@ public class FileListAdapter extends ArrayAdapter<String> {
 
     /** Damit kann "unsubscribe" automatisiert werden. */
     private final  List<Subscription> subscriptions = new ArrayList<>();
+
+    private RxEventBus<AbstractDataEvent> eventBus = RxEventBusProvider.get();
 
     public FileListAdapter(final Context context, final List<String> objects) {
         super(context, 0, objects);
@@ -96,7 +105,7 @@ public class FileListAdapter extends ArrayAdapter<String> {
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                Log.i(TAG, "Clicked on: " + filename);
+                eventBus.fire(new MessageEvent(filename));
             }
         });
 
@@ -135,7 +144,15 @@ public class FileListAdapter extends ArrayAdapter<String> {
         Bitmap bitmap = lruCache.get(filename);
         if(bitmap == null) {
             final File file = new File(AppDirs.getImagesFolder(getContext()),filename);
-            final Bitmap large = BitmapFactory.decodeFile(file.getAbsolutePath());
+            final String extension = FilenameUtils.getExtension(filename).toLowerCase();
+
+            Bitmap large;
+            if(extension.equals("mp4")) {
+                large = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(),
+                        MediaStore.Video.Thumbnails.MINI_KIND);
+            } else {
+                large = BitmapFactory.decodeFile(file.getAbsolutePath());
+            }
             bitmap = scaleToFitWidth(large,BITMAP_WIDTH);
             lruCache.put(filename,bitmap);
 

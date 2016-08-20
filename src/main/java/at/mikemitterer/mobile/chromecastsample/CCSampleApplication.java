@@ -34,7 +34,7 @@ public class CCSampleApplication extends Application {
             if(assets != null) {
                 final List<String> files = Arrays.asList(assets);
                 for(final String filename : files) {
-                    if(filename.endsWith(".jpg")) {
+                    if(filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".mp4")) {
                         final File target = new File(imagesFolder, filename);
                         FileUtils.copyInputStreamToFile(getAssets().open(filename), target);
 

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ChromeCastSample</string>
+    <!--
+     SampleID: 4F8B3483
+     Chromecast V1: -------
+    -->
+    <string name="app_id">4F8B3483</string>
+    <string name="media_route_menu_title">Browse</string>
+    <string name="action_settings">Settings</string>
 </resources>

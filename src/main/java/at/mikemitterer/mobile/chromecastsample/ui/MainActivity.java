@@ -1,7 +1,6 @@
 package at.mikemitterer.mobile.chromecastsample.ui;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.images.WebImage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import rx.Subscriber;
@@ -327,16 +325,17 @@ public class MainActivity extends AppCompatActivity {
         String url = mediaServer.getUrl() + "/" + filename;
         final String contentType = mediaServer.getMimeType(filename);
 
-        movieMetadata.addImage(new WebImage(Uri.parse(images.get(0))));
+        //movieMetadata.addImage(new WebImage(Uri.parse(images.get(0))));
+
         //movieMetadata.addImage(new WebImage(Uri.parse(images.get(1))));
         //movieMetadata.addImage(new WebImage(Uri.parse(url)));
 
         //url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/mp4/BigBuckBunny.mp4";
         return new MediaInfo.Builder(url)
-                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                .setStreamType(MediaInfo.STREAM_TYPE_NONE)
                 .setContentType(contentType)
                 .setMetadata(movieMetadata)
-                .setStreamDuration(0)
+                //.setStreamDuration(0)
                 .build();
     }
 

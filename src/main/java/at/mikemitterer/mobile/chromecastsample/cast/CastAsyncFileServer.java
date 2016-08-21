@@ -1,5 +1,6 @@
 package at.mikemitterer.mobile.chromecastsample.cast;
 
+import android.util.Log;
 import com.koushikdutta.async.AsyncServer;
 import com.koushikdutta.async.http.server.AsyncHttpServer;
 import com.koushikdutta.async.http.server.AsyncHttpServerRequest;
@@ -8,7 +9,6 @@ import com.koushikdutta.async.http.server.HttpServerRequestCallback;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Fileserver für die MEDIA-Files
@@ -66,11 +66,13 @@ public class CastAsyncFileServer implements CastFileServer {
         });
 
         server.listen(AsyncServer.getDefault(),PORT);
+        Log.d(TAG,String.format("Mediaserver started on port: %d",PORT));
     }
 
     @Override
     public void stop() {
         server.stop();
+        Log.d(TAG,String.format("Mediaserver stopped!",PORT));
     }
 
     @Override

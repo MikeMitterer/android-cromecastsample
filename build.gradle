@@ -20,6 +20,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //Duplicate...
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'log4j.properties'
+    }
+
+    ext {
+        mobiAdLibVersion            = "1.+"
+    }
 }
 
 dependencies {
@@ -43,6 +53,9 @@ dependencies {
 
     compile group: 'org.nanohttpd', name: 'nanohttpd', version: "2.2.0"
     compile 'com.koushikdutta.async:androidasync:2.+'
+
+    // Eigene Libs
+    compile group: 'at.mikemitterer',                   name: 'mobiad.library',         version: mobiAdLibVersion
 
     // Test ------------------------------------------------------------------------------------------------------------
     testCompile group: 'junit', name: 'junit', version: junitVersion

@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import at.mikemitterer.mobiad.library.events.ShowResourceEvent;
 import at.mikemitterer.mobile.chromecastsample.R;
 import at.mikemitterer.mobile.chromecastsample.cast.CastAsyncFileServer;
 import at.mikemitterer.mobile.chromecastsample.cast.CastFileServer;
@@ -21,6 +22,11 @@ import at.mikemitterer.mobile.chromecastsample.eventbus.events.AbstractDataEvent
 import at.mikemitterer.mobile.chromecastsample.eventbus.events.MessageEvent;
 import at.mikemitterer.mobile.chromecastsample.ui.adapter.FileListAdapter;
 import at.mikemitterer.mobile.chromecastsample.utils.AppDirs;
+import at.mikemitterer.rest.RestRequest;
+import at.mikemitterer.rest.RestRequestImpl;
+import at.mikemitterer.rest.exception.RequestFailedException;
+import at.mikemitterer.rest.exception.SigningException;
+import at.mikemitterer.uribuilder.URIBuilder;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.framework.CastButtonFactory;
@@ -37,6 +43,7 @@ import rx.schedulers.Schedulers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -266,11 +273,41 @@ public class MainActivity extends AppCompatActivity {
                             final MessageEvent event = (MessageEvent) abstractDataEvent;
 
                             Log.d(TAG,"Show: " + event.getData());
-                            loadRemoteMedia(event.getData());
+                            // Chromecast
+                            // loadRemoteMedia(event.getData());
+
+                            // MobiCast
+                            loadMobiCast(event.getData());
                         }
                     }
                 })
         );
+    }
+
+    private void loadMobiCast(final String filename) {
+        final String host = "192.168.0.42";
+        final String port = "8080";
+        final URI uriMobiCast = URIBuilder.fromUri(String.format("http://%s:%s/api/v1/cast/resource", host, port)).build();
+
+        if(mediaServer == null) {
+            Log.e(TAG,"MediaServer is null!!!");
+            return;
+        }
+
+        final URI uriImage = URIBuilder.fromUri(String.format("%s/%s", mediaServer.getUrl(), filename)).build();
+
+        try {
+            final ShowResourceEvent event = new ShowResourceEvent(uriImage.toURL());
+            final RestRequest request = new RestRequestImpl();
+
+            Log.i(TAG,String.format("Sending %s to %s",uriImage.toString(),uriMobiCast.toString()));
+
+            // Response ist der gesendete Event
+            final ShowResourceEvent response = request.post(uriMobiCast, event).to(ShowResourceEvent.class);
+
+        } catch (IOException | RequestFailedException | SigningException e) {
+            e.printStackTrace();
+        }
     }
 
     /** Signale / Events werden wieder entfernt */
